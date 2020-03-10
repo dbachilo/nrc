@@ -1,0 +1,11 @@
+# Gambas Project File 3.0
+# Compiled with Gambas 3.9.1
+Title=Normal RDP Client
+Startup=FMain
+Version=0.0.5
+Component=gb.image
+Component=gb.gui
+Component=gb.form
+TabSize=2
+Language=en_US
+Packager=1
