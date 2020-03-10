@@ -1,0 +1,90 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,77,88.5714)
+  { PictureBox1 PictureBox
+    MoveScaled(3,1,12,11)
+    Picture = Picture[".icon.png"]
+    Stretch = True
+  }
+  { server ComboBox
+    MoveScaled(22,5,34,4)
+  }
+  { Button1 Button
+    MoveScaled(23,27,20,6)
+    Text = ("Подключение")
+  }
+  { username TextBox
+    MoveScaled(22,13,16,3)
+    Text = ("bocha")
+  }
+  { password TextBox
+    MoveScaled(39,13,17,3)
+    Text = ("SoulINK122")
+    Password = True
+  }
+  { resolution TextBox
+    MoveScaled(22,21,17,3)
+    Text = ("1850x1000")
+  }
+  { TextLabel1 TextLabel
+    MoveScaled(48,1,28,2)
+    Text = ("(c) Дмитрий Бачило 2019")
+    Alignment = Align.Right
+  }
+  { Label1 Label
+    MoveScaled(22,2,21,2)
+    Text = ("Сервер[:порт]")
+  }
+  { Label2 Label
+    MoveScaled(22,10,14,2)
+    Text = ("Логин")
+  }
+  { Label3 Label
+    MoveScaled(39,10,16,2)
+    Text = ("Пароль")
+  }
+  { Label4 Label
+    MoveScaled(22,18,17,3)
+    Text = ("Разрешение:")
+  }
+  { Button2 Button
+    MoveScaled(2,27,20,6)
+    Text = ("Дополнительно")
+  }
+  { homeTransfer CheckBox
+    MoveScaled(1,45,46,3)
+    Text = ("Проброс домашней директории")
+  }
+  { FullScreen CheckBox
+    MoveScaled(40,21,30,3)
+    Text = ("Полный экран")
+  }
+  { clipTransfer CheckBox
+    MoveScaled(1,49,39,3)
+    Text = ("Проброс буфера обмена")
+    Value = CheckBox.True
+  }
+  { Button3 Button
+    MoveScaled(44,27,31,6)
+    Text = ("Сохранить подключение")
+  }
+  { prnTransfer Button
+    MoveScaled(1,39,29,4)
+    Text = ("Пробросить принтер")
+  }
+  { prnList ComboBox
+    MoveScaled(34,39,41,4)
+  }
+  { PassedPrinters GridView
+    MoveScaled(1,71,75,16)
+  }
+  { Label5 Label
+    MoveScaled(1,67,40,3)
+    Text = ("Проброшенные принтеры:")
+  }
+  { secTls CheckBox
+    MoveScaled(1,53,57,3)
+    Text = ("Проверка пароля на уровне TLS")
+  }
+}

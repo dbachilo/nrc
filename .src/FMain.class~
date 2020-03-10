@@ -1,0 +1,137 @@
+' Gambas class file
+
+Public runcommand As String
+
+
+Public Sub Button1_Click()
+Dim servers As File
+Dim props As File
+Dim serverstring As String
+Dim found As Boolean
+
+If Exist("~/.nrc/servers.log") Then 
+  servers = Open "~/.nrc/servers.log" For Input
+    While Not Eof(servers)
+      Line Input #servers, serverstring
+      If serverstring = server.Text Then found = True
+    Wend
+    Close #servers
+    If found = False Then
+      servers = Open "~/.nrc/servers.log" For Append
+      Print #servers, server.Text
+      Close #servers
+    Endif
+Else 
+  servers = Open "~/.nrc/servers.log" For Create
+  Print #servers, server.Text
+  Close #servers
+End If
+
+props = Open "~/.nrc/props.log" For Create
+  Print #props, username.Text
+  Print #props, password.Text
+  Print #props, resolution.Text
+Close #props
+
+  MakeScript
+  Shell runcommand
+
+End
+
+Public Sub MakeScript()
+Dim passprinter As Integer
+
+runcommand = "xfreerdp /cert-ignore +fonts "
+If clipTransfer.Value = True Then runcommand &= "+clipboard "
+If secTls.Value = True Then runcommand &= "/sec:tls "
+If homeTransfer.Value = True Then runcommand &= "/drive:Home," & User.Home & " "
+
+If PassedPrinters.Rows.Count > 0 Then
+  For passprinter = 0 To PassedPrinters.Rows.Count - 1
+    runcommand &= "/printer:" & PassedPrinters[passprinter, 0].Text & "," & Chr(34) & PassedPrinters[passprinter, 1].Text & Chr(34) & " "
+  Next
+Endif
+
+If FullScreen.Value = False Then runcommand &= " /size:" & resolution.text & " " Else runcommand &= "/f "
+
+runcommand &= "/u:" & username.Text & " /p:" & password.Text & " /v:" & server.Text
+
+End
+
+
+Public Sub Form_Open()
+Dim servers As File
+Dim props As File
+Dim serverstring As String
+Dim localprinter As String
+
+Me.Height = 250
+Me.Resizable = False
+
+  If Not Exist("~/.nrc") Then Mkdir ("~/.nrc")
+  
+  If Exist("~/.nrc/servers.log") Then 
+    servers = Open "~/.nrc/servers.log" For Input
+    While Not Eof(servers)
+      Line Input #servers, serverstring
+      server.Add(serverstring)
+    Wend
+    Close #servers
+  End If
+  
+  If Exist("~/.nrc/props.log") Then
+    props = Open "~/.nrc/props.log" For Input
+    Input #props, username.Text
+    Input #props, password.Text
+    Input #props, resolution.Text
+    Close #props
+  End If
+  
+PassedPrinters.Columns.Count = 2
+  
+For Each localprinter In Printer.List
+  prnList.Add(localprinter)  
+Next
+
+End
+
+Public Sub Button2_Click()
+Me.Resizable = True
+  Select Case Me.Height
+    Case 250
+      Me.Height = 600 
+    Case 600
+      Me.Height = 250
+Me.Resizable = False
+  End Select
+  
+
+End
+
+Public Sub prnTransfer_Click()
+Dim WinPrnName As String
+
+WinPrnName = InputBox("Введите понятное название этого принтера для драйвера Windows", "имя для Win-драйвера")
+
+PassedPrinters.Rows.Count += 1
+PassedPrinters[PassedPrinters.Rows.Count - 1, 0].text = prnList.Text
+PassedPrinters[PassedPrinters.Rows.Count - 1, 1].text = WinPrnName
+
+End
+
+Public Sub Button3_Click()
+Dim rdpscript As File
+
+MakeScript
+If Dialog.SaveFile() Then Return
+rdpscript = Open Dialog.Path & ".desktop" For Create
+Print #rdpscript, "[Desktop Entry]"
+Print #rdpscript, "Name=" & server.Text
+Print #rdpscript, "Comment=Подключение к удаленному рабочему столу"
+Print #rdpscript, "Exec=" & runcommand
+Print #rdpscript, "Icon=/home/user/Dist/NRC/icon.png"
+Print #rdpscript, "Type=Application"
+Close #rdpscript
+message("Файл сохранён")
+
+End
